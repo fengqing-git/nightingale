@@ -1,0 +1,1165 @@
+{
+    "name": "仪表盘",
+    "tags": "",
+    "ident": "",
+    "configs": {
+        "links": [
+            {
+                "targetBlank": true,
+                "title": "n9e",
+                "url": "https://n9e.github.io/"
+            },
+            {
+                "targetBlank": true,
+                "title": "author",
+                "url": "http://flashcat.cloud/"
+            }
+        ],
+        "panels": [
+            {
+                "type": "table",
+                "id": "77bf513a-8504-4d33-9efe-75aaf9abc9e4",
+                "layout": {
+                    "h": 6,
+                    "w": 24,
+                    "x": 0,
+                    "y": 0,
+                    "i": "77bf513a-8504-4d33-9efe-75aaf9abc9e4",
+                    "isResizable": true
+                },
+                "version": "3.0.0",
+                "datasourceCate": "prometheus",
+                "datasourceValue": "${prom}",
+                "targets": [
+                    {
+                        "expr": "avg(cpu_usage_active{cpu=\"cpu-total\", ident=~\"$ident\"}) by (ident)",
+                        "legend": "CPU使用率",
+                        "maxDataPoints": 240,
+                        "refId": "A"
+                    },
+                    {
+                        "expr": "avg(mem_used_percent{ident=~\"$ident\"}) by (ident)",
+                        "legend": "内存使用率",
+                        "maxDataPoints": 240,
+                        "refId": "B"
+                    },
+                    {
+                        "expr": "avg(mem_total{ident=~\"$ident\"}) by (ident)",
+                        "legend": "总内存",
+                        "maxDataPoints": 240,
+                        "refId": "C"
+                    },
+                    {
+                        "expr": "avg(disk_used_percent{ident=~\"$ident\",path=\"/\"}) by (ident) or avg(disk_used_percent{device=\"C:\"}) by (ident)",
+                        "legend": "分区使用率",
+                        "maxDataPoints": 240,
+                        "refId": "D"
+                    },
+                    {
+                        "expr": "max(irate(net_bytes_recv[2m]) * 8) by (ident)",
+                        "__mode__": "__query__",
+                        "refId": "E",
+                        "maxDataPoints": 240,
+                        "legend": "下载带宽"
+                    },
+                    {
+                        "expr": "max(irate(net_bytes_sent[2m]) * 8)  by (ident)",
+                        "__mode__": "__query__",
+                        "refId": "F",
+                        "maxDataPoints": 240,
+                        "legend": "上传带宽"
+                    },
+                    {
+                        "expr": "max(irate(diskio_write_bytes[5m])) by (ident)",
+                        "__mode__": "__query__",
+                        "refId": "G",
+                        "maxDataPoints": 240,
+                        "legend": "磁盘写入"
+                    },
+                    {
+                        "expr": "max(irate(diskio_read_bytes[5m])) by (ident)",
+                        "__mode__": "__query__",
+                        "refId": "H",
+                        "maxDataPoints": 240,
+                        "legend": "磁盘读取"
+                    },
+                    {
+                        "expr": "system_uptime{ident=~\"$ident\"}",
+                        "__mode__": "__query__",
+                        "refId": "I",
+                        "maxDataPoints": 240,
+                        "legend": "启动时间"
+                    }
+                ],
+                "transformations": [
+                    {
+                        "id": "organize",
+                        "options": {
+                            "renameByName": {
+                                "ident": "机器"
+                            },
+                            "indexByName": {
+                                "ident": 0
+                            },
+                            "excludeByName": {
+                                "ident": false
+                            }
+                        }
+                    }
+                ],
+                "name": "dashboards",
+                "links": [],
+                "maxPerRow": 4,
+                "custom": {
+                    "showHeader": true,
+                    "colorMode": "background",
+                    "calc": "lastNotNull",
+                    "displayMode": "labelValuesToRows",
+                    "aggrDimension": "ident",
+                    "sortColumn": "ident",
+                    "sortOrder": "ascend",
+                    "linkMode": "appendLinkColumn",
+                    "links": [
+                        {
+                            "title": "详情",
+                            "url": "/dashboards-built-in/detail?__built-in-cate=Linux&__built-in-name=Linux%20Host%20by%20Categraf%20v2&ident=${__field.labels.ident}",
+                            "targetBlank": true
+                        }
+                    ]
+                },
+                "options": {
+                    "standardOptions": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "value": "A"
+                        },
+                        "properties": {
+                            "standardOptions": {
+                                "util": "percent"
+                            },
+                            "valueMappings": [
+                                {
+                                    "match": {
+                                        "to": 65
+                                    },
+                                    "result": {
+                                        "color": "#2c9d3d"
+                                    },
+                                    "type": "range"
+                                },
+                                {
+                                    "match": {
+                                        "to": 90
+                                    },
+                                    "result": {
+                                        "color": "#ff656b"
+                                    },
+                                    "type": "range"
+                                },
+                                {
+                                    "match": {
+                                        "from": 90
+                                    },
+                                    "result": {
+                                        "color": "#f50505"
+                                    },
+                                    "type": "range"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "value": "B"
+                        },
+                        "properties": {
+                            "standardOptions": {
+                                "util": "percent"
+                            },
+                            "valueMappings": [
+                                {
+                                    "match": {
+                                        "to": 65
+                                    },
+                                    "result": {
+                                        "color": "#2c9d3d"
+                                    },
+                                    "type": "range"
+                                },
+                                {
+                                    "match": {
+                                        "to": 90
+                                    },
+                                    "result": {
+                                        "color": "#ff656b"
+                                    },
+                                    "type": "range"
+                                },
+                                {
+                                    "match": {
+                                        "from": 90
+                                    },
+                                    "result": {
+                                        "color": "#fa0a0a"
+                                    },
+                                    "type": "range"
+                                }
+                            ]
+                        },
+                        "type": "special"
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "value": "C"
+                        },
+                        "properties": {
+                            "standardOptions": {
+                                "decimals": 2,
+                                "util": "bytesIEC",
+                                "max": null
+                            },
+                            "valueMappings": [
+                                {
+                                    "type": "range",
+                                    "result": {
+                                        "color": "rgba(44, 157, 61, 1)"
+                                    },
+                                    "match": {
+                                        "from": 1
+                                    }
+                                }
+                            ]
+                        },
+                        "type": "special"
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "value": "D"
+                        },
+                        "properties": {
+                            "standardOptions": {
+                                "decimals": 2,
+                                "util": "percent"
+                            },
+                            "valueMappings": [
+                                {
+                                    "match": {
+                                        "to": 90
+                                    },
+                                    "result": {
+                                        "color": "#2c9d3d"
+                                    },
+                                    "type": "range"
+                                },
+                                {
+                                    "match": {
+                                        "from": 90
+                                    },
+                                    "result": {
+                                        "color": "#ff656b"
+                                    },
+                                    "type": "range"
+                                }
+                            ]
+                        },
+                        "type": "special"
+                    },
+                    {
+                        "type": "special",
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "value": "E"
+                        },
+                        "properties": {
+                            "standardOptions": {
+                                "decimals": 2,
+                                "util": "bitsSecIEC"
+                            },
+                            "valueMappings": [
+                                {
+                                    "type": "range",
+                                    "result": {
+                                        "color": "rgba(44, 157, 61, 1)"
+                                    },
+                                    "match": {
+                                        "from": 1,
+                                        "to": 30485760
+                                    }
+                                },
+                                {
+                                    "type": "range",
+                                    "result": {
+                                        "color": "rgba(255, 101, 107, 1)"
+                                    },
+                                    "match": {
+                                        "from": 30485760,
+                                        "to": null
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "type": "special",
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "value": "F"
+                        },
+                        "properties": {
+                            "standardOptions": {
+                                "decimals": 2,
+                                "util": "bitsSecIEC"
+                            },
+                            "valueMappings": [
+                                {
+                                    "type": "range",
+                                    "result": {
+                                        "color": "rgba(44, 157, 61, 1)"
+                                    },
+                                    "match": {
+                                        "from": 1,
+                                        "to": 30485760
+                                    }
+                                },
+                                {
+                                    "type": "range",
+                                    "result": {
+                                        "color": "rgba(206, 79, 82, 1)"
+                                    },
+                                    "match": {
+                                        "from": 30485760
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "type": "special",
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "value": "G"
+                        },
+                        "properties": {
+                            "valueMappings": [
+                                {
+                                    "type": "range",
+                                    "result": {
+                                        "color": "rgba(44, 157, 61, 1)"
+                                    },
+                                    "match": {
+                                        "to": 10485760,
+                                        "from": 0
+                                    }
+                                },
+                                {
+                                    "type": "range",
+                                    "result": {
+                                        "color": "rgba(206, 79, 82, 1)"
+                                    },
+                                    "match": {
+                                        "from": 10485760
+                                    }
+                                }
+                            ],
+                            "standardOptions": {
+                                "decimals": 2,
+                                "util": "bytesSecIEC"
+                            }
+                        }
+                    },
+                    {
+                        "type": "special",
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "value": "H"
+                        },
+                        "properties": {
+                            "valueMappings": [
+                                {
+                                    "type": "range",
+                                    "result": {
+                                        "color": "rgba(44, 157, 61, 1)"
+                                    },
+                                    "match": {
+                                        "from": 0,
+                                        "to": 10485760
+                                    }
+                                },
+                                {
+                                    "type": "range",
+                                    "result": {
+                                        "color": "rgba(255, 101, 107, 1)"
+                                    },
+                                    "match": {
+                                        "from": 10485760
+                                    }
+                                }
+                            ],
+                            "standardOptions": {
+                                "util": "bytesSecIEC"
+                            }
+                        }
+                    },
+                    {
+                        "type": "special",
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "value": "I"
+                        },
+                        "properties": {
+                            "valueMappings": [
+                                {
+                                    "type": "range",
+                                    "result": {
+                                        "color": "rgba(44, 157, 61, 1)"
+                                    },
+                                    "match": {
+                                        "to": null,
+                                        "from": 1
+                                    }
+                                }
+                            ],
+                            "standardOptions": {
+                                "util": "seconds",
+                                "decimals": 0
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                "type": "timeseries",
+                "id": "71235a60-fd24-43f6-b2c8-1db7ea9b3f65",
+                "layout": {
+                    "h": 6,
+                    "w": 7,
+                    "x": 0,
+                    "y": 6,
+                    "i": "71235a60-fd24-43f6-b2c8-1db7ea9b3f65",
+                    "isResizable": true
+                },
+                "version": "3.0.0",
+                "datasourceCate": "prometheus",
+                "datasourceValue": "${prom}",
+                "targets": [
+                    {
+                        "refId": "A",
+                        "expr": "100-cpu_usage_idle{ident=~\"$ident\",cpu=\"cpu-total\"}",
+                        "maxDataPoints": 240,
+                        "legend": "{{ident}}",
+                        "step": 15
+                    }
+                ],
+                "transformations": [
+                    {
+                        "id": "organize",
+                        "options": {}
+                    }
+                ],
+                "name": "CPU使用率历史趋势",
+                "maxPerRow": 4,
+                "options": {
+                    "tooltip": {
+                        "mode": "single"
+                    },
+                    "legend": {
+                        "displayMode": "hidden",
+                        "behaviour": "showItem"
+                    },
+                    "standardOptions": {
+                        "util": "percent",
+                        "decimals": 1
+                    },
+                    "thresholds": {
+                        "steps": [
+                            {
+                                "color": "rgba(255, 101, 107, 1)",
+                                "value": 80,
+                                "type": ""
+                            },
+                            {
+                                "color": "#634CD9",
+                                "value": null,
+                                "type": "base"
+                            }
+                        ]
+                    }
+                },
+                "custom": {
+                    "drawStyle": "lines",
+                    "lineInterpolation": "smooth",
+                    "spanNulls": false,
+                    "lineWidth": 2,
+                    "fillOpacity": 0.05,
+                    "gradientMode": "none",
+                    "stack": "off",
+                    "scaleDistribution": {
+                        "type": "linear"
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID"
+                        },
+                        "properties": {
+                            "rightYAxisDisplay": "off"
+                        }
+                    }
+                ]
+            },
+            {
+                "type": "timeseries",
+                "id": "905a16c6-bdcf-4a98-94f7-c5853cc10b9c",
+                "layout": {
+                    "h": 6,
+                    "w": 8,
+                    "x": 7,
+                    "y": 6,
+                    "i": "905a16c6-bdcf-4a98-94f7-c5853cc10b9c",
+                    "isResizable": true
+                },
+                "version": "3.0.0",
+                "datasourceCate": "prometheus",
+                "datasourceValue": "${prom}",
+                "targets": [
+                    {
+                        "refId": "A",
+                        "expr": "mem_used_percent",
+                        "maxDataPoints": 240,
+                        "legend": "{{ident}}",
+                        "step": 15
+                    }
+                ],
+                "transformations": [
+                    {
+                        "id": "organize",
+                        "options": {}
+                    }
+                ],
+                "name": "内存使用率历史趋势",
+                "maxPerRow": 4,
+                "options": {
+                    "tooltip": {
+                        "mode": "all",
+                        "sort": "none"
+                    },
+                    "legend": {
+                        "displayMode": "hidden",
+                        "behaviour": "showItem"
+                    },
+                    "standardOptions": {
+                        "util": "percent"
+                    },
+                    "thresholds": {
+                        "steps": [
+                            {
+                                "color": "rgba(255, 101, 107, 1)",
+                                "value": 80,
+                                "type": ""
+                            },
+                            {
+                                "color": "#634CD9",
+                                "value": null,
+                                "type": "base"
+                            }
+                        ]
+                    }
+                },
+                "custom": {
+                    "drawStyle": "lines",
+                    "lineInterpolation": "smooth",
+                    "spanNulls": false,
+                    "lineWidth": 2,
+                    "fillOpacity": 0.03,
+                    "gradientMode": "none",
+                    "stack": "off",
+                    "scaleDistribution": {
+                        "type": "linear"
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID"
+                        },
+                        "properties": {
+                            "rightYAxisDisplay": "off"
+                        }
+                    }
+                ]
+            },
+            {
+                "type": "timeseries",
+                "id": "f00a8098-a2c7-42eb-bb9e-8be1b6e50c87",
+                "layout": {
+                    "h": 6,
+                    "w": 9,
+                    "x": 15,
+                    "y": 6,
+                    "i": "f00a8098-a2c7-42eb-bb9e-8be1b6e50c87",
+                    "isResizable": true
+                },
+                "version": "3.0.0",
+                "datasourceCate": "prometheus",
+                "datasourceValue": "${prom}",
+                "targets": [
+                    {
+                        "refId": "A",
+                        "expr": "rate(diskio_io_time{ident=~\"$ident\"}[1m])/10",
+                        "maxDataPoints": 240,
+                        "legend": "{{ident}} {{name}}",
+                        "step": 15
+                    }
+                ],
+                "transformations": [
+                    {
+                        "id": "organize",
+                        "options": {}
+                    }
+                ],
+                "name": "IO使用率历史趋势",
+                "maxPerRow": 4,
+                "options": {
+                    "tooltip": {
+                        "mode": "all",
+                        "sort": "none"
+                    },
+                    "legend": {
+                        "displayMode": "hidden",
+                        "behaviour": "showItem"
+                    },
+                    "standardOptions": {
+                        "util": "percent",
+                        "decimals": 1
+                    },
+                    "thresholds": {
+                        "steps": [
+                            {
+                                "color": "rgba(255, 101, 107, 1)",
+                                "value": 80,
+                                "type": ""
+                            },
+                            {
+                                "color": "#634CD9",
+                                "value": null,
+                                "type": "base"
+                            }
+                        ]
+                    }
+                },
+                "custom": {
+                    "drawStyle": "lines",
+                    "lineInterpolation": "smooth",
+                    "spanNulls": false,
+                    "lineWidth": 2,
+                    "fillOpacity": 0.04,
+                    "gradientMode": "none",
+                    "stack": "off",
+                    "scaleDistribution": {
+                        "type": "linear"
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID"
+                        },
+                        "properties": {
+                            "rightYAxisDisplay": "off"
+                        }
+                    }
+                ]
+            },
+            {
+                "type": "timeseries",
+                "id": "29061d51-726a-4fea-a207-eec7a16384f2",
+                "layout": {
+                    "h": 5,
+                    "w": 7,
+                    "x": 0,
+                    "y": 12,
+                    "i": "29061d51-726a-4fea-a207-eec7a16384f2",
+                    "isResizable": true
+                },
+                "version": "3.0.0",
+                "datasourceCate": "prometheus",
+                "datasourceValue": "${prom}",
+                "targets": [
+                    {
+                        "refId": "A",
+                        "expr": "rate(net_bytes_recv{ident=~\"$ident\"}[1m])*8",
+                        "maxDataPoints": 240,
+                        "legend": "{{ident}} {{interface}}",
+                        "step": 15
+                    }
+                ],
+                "transformations": [
+                    {
+                        "id": "organize",
+                        "options": {}
+                    }
+                ],
+                "name": "网络速度趋势-入向",
+                "maxPerRow": 4,
+                "options": {
+                    "tooltip": {
+                        "mode": "all",
+                        "sort": "none"
+                    },
+                    "legend": {
+                        "displayMode": "hidden",
+                        "behaviour": "showItem"
+                    },
+                    "standardOptions": {
+                        "util": "bitsSecSI",
+                        "decimals": 1
+                    },
+                    "thresholds": {
+                        "steps": [
+                            {
+                                "color": "rgba(255, 101, 107, 1)",
+                                "value": 3048576,
+                                "type": ""
+                            },
+                            {
+                                "color": "#634CD9",
+                                "value": null,
+                                "type": "base"
+                            }
+                        ]
+                    }
+                },
+                "custom": {
+                    "drawStyle": "lines",
+                    "lineInterpolation": "smooth",
+                    "spanNulls": false,
+                    "lineWidth": 2,
+                    "fillOpacity": 0.04,
+                    "gradientMode": "none",
+                    "stack": "off",
+                    "scaleDistribution": {
+                        "type": "linear"
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID"
+                        },
+                        "properties": {
+                            "rightYAxisDisplay": "off"
+                        }
+                    }
+                ]
+            },
+            {
+                "type": "timeseries",
+                "id": "7e32effe-a47b-4b28-aaaa-5df5b7dfad88",
+                "layout": {
+                    "h": 5,
+                    "w": 8,
+                    "x": 7,
+                    "y": 12,
+                    "i": "7e32effe-a47b-4b28-aaaa-5df5b7dfad88",
+                    "isResizable": true
+                },
+                "version": "3.0.0",
+                "datasourceCate": "prometheus",
+                "datasourceValue": "${prom}",
+                "targets": [
+                    {
+                        "refId": "A",
+                        "expr": "rate(net_bytes_sent{ident=~\"$ident\"}[1m])*8",
+                        "maxDataPoints": 240,
+                        "legend": "{{ident}} {{interface}}",
+                        "step": 15
+                    }
+                ],
+                "transformations": [
+                    {
+                        "id": "organize",
+                        "options": {}
+                    }
+                ],
+                "name": "网络速度趋势-出向",
+                "maxPerRow": 4,
+                "options": {
+                    "tooltip": {
+                        "mode": "all",
+                        "sort": "none"
+                    },
+                    "legend": {
+                        "displayMode": "hidden",
+                        "behaviour": "showItem"
+                    },
+                    "valueMappings": [],
+                    "standardOptions": {},
+                    "thresholds": {
+                        "steps": [
+                            {
+                                "color": "rgba(255, 101, 107, 1)",
+                                "value": 3048576,
+                                "type": ""
+                            },
+                            {
+                                "color": "#634CD9",
+                                "value": null,
+                                "type": "base"
+                            }
+                        ]
+                    }
+                },
+                "custom": {
+                    "drawStyle": "lines",
+                    "lineInterpolation": "smooth",
+                    "spanNulls": false,
+                    "lineWidth": 2,
+                    "fillOpacity": 0.03,
+                    "gradientMode": "none",
+                    "stack": "off",
+                    "scaleDistribution": {
+                        "type": "linear"
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID"
+                        },
+                        "properties": {
+                            "rightYAxisDisplay": "off"
+                        }
+                    }
+                ]
+            },
+            {
+                "type": "timeseries",
+                "id": "391fd07e-387c-4d8a-8f49-c393f9b6f3cb",
+                "layout": {
+                    "h": 5,
+                    "w": 9,
+                    "x": 15,
+                    "y": 12,
+                    "i": "391fd07e-387c-4d8a-8f49-c393f9b6f3cb",
+                    "isResizable": true
+                },
+                "version": "3.0.0",
+                "datasourceCate": "prometheus",
+                "datasourceValue": "${prom}",
+                "targets": [
+                    {
+                        "refId": "A",
+                        "expr": "netstat_tcp_tw{ident=~\"$ident\"}",
+                        "maxDataPoints": 240,
+                        "step": 15
+                    }
+                ],
+                "transformations": [
+                    {
+                        "id": "organize",
+                        "options": {}
+                    }
+                ],
+                "name": "Time Wait 状态的连接数",
+                "maxPerRow": 4,
+                "options": {
+                    "tooltip": {
+                        "mode": "all",
+                        "sort": "none"
+                    },
+                    "legend": {
+                        "displayMode": "hidden",
+                        "behaviour": "showItem"
+                    },
+                    "standardOptions": {},
+                    "thresholds": {
+                        "steps": [
+                            {
+                                "color": "#634CD9",
+                                "value": null,
+                                "type": "base"
+                            }
+                        ]
+                    }
+                },
+                "custom": {
+                    "drawStyle": "lines",
+                    "lineInterpolation": "smooth",
+                    "spanNulls": false,
+                    "lineWidth": 1,
+                    "fillOpacity": 0,
+                    "gradientMode": "none",
+                    "stack": "off",
+                    "scaleDistribution": {
+                        "type": "linear"
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID"
+                        },
+                        "properties": {
+                            "rightYAxisDisplay": "off"
+                        }
+                    }
+                ]
+            },
+            {
+                "type": "timeseries",
+                "id": "83cfa865-feb3-43fa-9718-cb020705d579",
+                "layout": {
+                    "h": 5,
+                    "w": 7,
+                    "x": 0,
+                    "y": 17,
+                    "i": "83cfa865-feb3-43fa-9718-cb020705d579",
+                    "isResizable": true
+                },
+                "version": "3.0.0",
+                "datasourceCate": "prometheus",
+                "datasourceValue": "${prom}",
+                "targets": [
+                    {
+                        "refId": "A",
+                        "expr": "max(irate(diskio_write_bytes[5m])) by (ident)",
+                        "maxDataPoints": 240,
+                        "step": 15
+                    }
+                ],
+                "transformations": [
+                    {
+                        "id": "organize",
+                        "options": {}
+                    }
+                ],
+                "name": "磁盘写入趋势",
+                "maxPerRow": 4,
+                "options": {
+                    "tooltip": {
+                        "mode": "all",
+                        "sort": "none"
+                    },
+                    "legend": {
+                        "displayMode": "hidden",
+                        "behaviour": "showItem"
+                    },
+                    "standardOptions": {
+                        "util": "bytesSecIEC"
+                    },
+                    "thresholds": {
+                        "steps": [
+                            {
+                                "color": "rgba(255, 101, 107, 1)",
+                                "value": 304857600,
+                                "type": ""
+                            },
+                            {
+                                "color": "#634CD9",
+                                "value": null,
+                                "type": "base"
+                            }
+                        ]
+                    }
+                },
+                "custom": {
+                    "drawStyle": "lines",
+                    "lineInterpolation": "smooth",
+                    "spanNulls": false,
+                    "lineWidth": 2,
+                    "fillOpacity": 0.03,
+                    "gradientMode": "none",
+                    "stack": "off",
+                    "scaleDistribution": {
+                        "type": "linear"
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID"
+                        },
+                        "properties": {
+                            "rightYAxisDisplay": "off"
+                        }
+                    }
+                ]
+            },
+            {
+                "type": "timeseries",
+                "id": "b94da1d0-f7ee-44e9-b86d-9fae4f30ce13",
+                "layout": {
+                    "h": 5,
+                    "w": 8,
+                    "x": 7,
+                    "y": 17,
+                    "i": "b94da1d0-f7ee-44e9-b86d-9fae4f30ce13",
+                    "isResizable": true
+                },
+                "version": "3.0.0",
+                "datasourceCate": "prometheus",
+                "datasourceValue": "${prom}",
+                "targets": [
+                    {
+                        "refId": "A",
+                        "expr": "max(irate(diskio_read_bytes[5m])) by (ident)",
+                        "maxDataPoints": 240
+                    }
+                ],
+                "transformations": [
+                    {
+                        "id": "organize",
+                        "options": {}
+                    }
+                ],
+                "name": "磁盘读取趋势",
+                "maxPerRow": 4,
+                "options": {
+                    "tooltip": {
+                        "mode": "all",
+                        "sort": "none"
+                    },
+                    "legend": {
+                        "displayMode": "hidden",
+                        "behaviour": "showItem"
+                    },
+                    "standardOptions": {
+                        "util": "bytesSecIEC"
+                    },
+                    "thresholds": {
+                        "steps": [
+                            {
+                                "color": "#634CD9",
+                                "value": null,
+                                "type": "base"
+                            }
+                        ]
+                    }
+                },
+                "custom": {
+                    "drawStyle": "lines",
+                    "lineInterpolation": "smooth",
+                    "spanNulls": false,
+                    "lineWidth": 2,
+                    "fillOpacity": 0.05,
+                    "gradientMode": "none",
+                    "stack": "off",
+                    "scaleDistribution": {
+                        "type": "linear"
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID"
+                        },
+                        "properties": {
+                            "rightYAxisDisplay": "off"
+                        }
+                    }
+                ]
+            },
+            {
+                "type": "timeseries",
+                "id": "0b478750-3b7d-450d-bfa5-d3e88987189a",
+                "layout": {
+                    "h": 5,
+                    "w": 9,
+                    "x": 15,
+                    "y": 17,
+                    "i": "0b478750-3b7d-450d-bfa5-d3e88987189a",
+                    "isResizable": true
+                },
+                "version": "3.0.0",
+                "datasourceCate": "prometheus",
+                "datasourceValue": "${prom}",
+                "targets": [
+                    {
+                        "refId": "A",
+                        "expr": "disk_free{ident=~\"$ident\"}",
+                        "maxDataPoints": 240,
+                        "legend": "{{ident}} {{path}}"
+                    }
+                ],
+                "transformations": [
+                    {
+                        "id": "organize",
+                        "options": {}
+                    }
+                ],
+                "name": "磁盘剩余空间",
+                "maxPerRow": 4,
+                "options": {
+                    "tooltip": {
+                        "mode": "all",
+                        "sort": "none"
+                    },
+                    "legend": {
+                        "displayMode": "hidden",
+                        "behaviour": "showItem"
+                    },
+                    "standardOptions": {
+                        "util": "bytesIEC"
+                    },
+                    "thresholds": {
+                        "steps": [
+                            {
+                                "color": "#634CD9",
+                                "value": null,
+                                "type": "base"
+                            }
+                        ]
+                    }
+                },
+                "custom": {
+                    "drawStyle": "lines",
+                    "lineInterpolation": "smooth",
+                    "spanNulls": false,
+                    "lineWidth": 1,
+                    "fillOpacity": 0,
+                    "gradientMode": "none",
+                    "stack": "off",
+                    "scaleDistribution": {
+                        "type": "linear"
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID"
+                        },
+                        "properties": {
+                            "rightYAxisDisplay": "off"
+                        }
+                    }
+                ]
+            }
+        ],
+        "var": [
+            {
+                "definition": "prometheus",
+                "name": "prom",
+                "type": "datasource"
+            },
+            {
+                "allOption": true,
+                "datasource": {
+                    "cate": "prometheus",
+                    "value": "${prom}"
+                },
+                "definition": "label_values(system_load1,ident)",
+                "multi": true,
+                "name": "ident",
+                "type": "query"
+            }
+        ],
+        "version": "3.0.0"
+    }
+}
